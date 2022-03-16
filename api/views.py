@@ -26,9 +26,20 @@ def check(request, id):
         
     return Response("There is no any plagiarism", status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def vectorize(request):
+    data = request.POST["data"]
+    preprocess = VectorizeConfig.reprocess(data)
+    vector = VectorizeConfig.get_vec(preprocess)
+    return Response(vector)
 
 @api_view(['GET'])
 def search(request, query):
+    page = request.GET.get('from', 0)
+    tags = request.GET.get('tags', None)
+    type = request.GET.get('query', None)
+    must_not = request.GET.get('query', None)
+    
     preprocess = VectorizeConfig.reprocess(query)
     vector = VectorizeConfig.get_vec(preprocess)
 
@@ -49,18 +60,23 @@ def search(request, query):
     )
     
     query = {
-    'size': 10,
-    "query": {
-    "knn": {
-      "vector": {
-        "vector": vector.tolist(),
-        "k": 2
-       }
-      }
-    },
-    "fields": [
-       "title"
-    ]
+        "size": 10,
+        "from": page,
+        "query": {
+            # "bool" : {
+            #     "should": {
+            #         "term": {
+            #             "tags": "laravel"
+            #         }    
+            #     }
+            # },
+            "knn": {
+                "vector": {
+                    "vector": vector.tolist(),
+                    "k": 2
+                }
+            }
+        }
     }
 
     response = client.search(
@@ -71,7 +87,7 @@ def search(request, query):
     return Response({
         "data" : {
             "total"  : response["hits"]["total"]["value"],
-            "from"   : 0,
+            "from"   : page,
             "results": ForumSearchSerializer(response["hits"]["hits"], many=True).data
         },
         "message" : None,

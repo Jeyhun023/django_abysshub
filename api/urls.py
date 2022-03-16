@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     path('plagiarism/check/<int:id>', views.check),
     path('search/<str:query>', views.search),
+    path('vectorize', views.vectorize),
 ]
