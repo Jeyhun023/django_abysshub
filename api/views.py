@@ -37,8 +37,8 @@ def vectorize(request):
 def search(request, query):
     page = request.GET.get('from', 0)
     tags = request.GET.get('tags', None)
-    type = request.GET.get('query', None)
-    must_not = request.GET.get('query', None)
+    type = request.GET.get('type', None)
+    must_not = request.GET.get('must_not', None)
     
     preprocess = VectorizeConfig.reprocess(query)
     vector = VectorizeConfig.get_vec(preprocess)
@@ -63,25 +63,36 @@ def search(request, query):
         "size": 10,
         "from": page,
         "query": {
-            # "bool" : {
-            #     "should": {
-            #         "term": {
-            #             "tags": "laravel"
-            #         }    
-            #     }
-            # },
-            "knn": {
-                "vector": {
-                    "vector": vector.tolist(),
-                    "k": 2
+            "bool" : {
+                "must": {
+                    "knn": {
+                        "vector": {
+                            "vector": vector.tolist(),
+                            "k": 2
+                        }
+                    }
                 }
             }
         }
     }
+    if(tags != None):
+        query["query"]["bool"]["should"] = []
+        query["query"]["bool"]["minimum_should_match"] = 1
+        query["query"]["bool"]["boost"] = 1.00
+        for tag in tags.split(","):
+            query["query"]["bool"]["should"].append({ "term" : { "tags" : tag }})
+
+    if(must_not != None):
+        query["query"]["bool"]["must_not"] = []
+        for tag in must_not.split(","):
+            query["query"]["bool"]["must_not"].append({ "term" : { "tags" : tag }})
+
+    if(type != None):
+        query["query"]["bool"]["must"] = [{ "term" : { "type" : type }}]
 
     response = client.search(
         body = query,
-        index = 'mainvec'
+        index = 'threads'
     )
 
     return Response({
