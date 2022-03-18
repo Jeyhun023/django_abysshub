@@ -88,7 +88,7 @@ def search(request, query):
             query["query"]["bool"]["must_not"].append({ "term" : { "tags" : tag }})
 
     if(type != None):
-        query["query"]["bool"]["must"] = [{ "term" : { "type" : type }}]
+        query["query"]["bool"]["filter"] = [{ "term" : { "type" : type }}]
 
     response = client.search(
         body = query,
