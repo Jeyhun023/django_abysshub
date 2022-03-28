@@ -43,9 +43,9 @@ def search(request, query):
     preprocess = VectorizeConfig.reprocess(query)
     vector = VectorizeConfig.get_vec(preprocess)
 
-    host = 'search-abysshub-j3qdpacyhclsugmt4pt74f635e.us-east-2.es.amazonaws.com'
+    host = 'search-abysshub-i7nohp4lkpykdd7ppfdysxefcy.us-east-2.es.amazonaws.com'
     port = '443'
-    auth = ('Abyss', '888Ceyhun2001@') 
+    auth = ('abyss', '888Ceyhun2001@') 
     ca_certs_path = '/home/abyss/Desktop/Abysshub/root-ca.pem' 
 
     client = OpenSearch(
