@@ -77,9 +77,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'abysshub',
-        'USER': 'root',
-        'PASSWORD': '888ceki2001',
-        'HOST': 'abyss.cpc5oipcsjby.us-east-2.rds.amazonaws.com',
+        'USER': 'abysshub@abysshubms',
+        'PASSWORD': '888Ceyhun2001',
+        'HOST': 'abysshubms.mysql.database.azure.com',
         'PORT': '3306',
     }
 }

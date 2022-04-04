@@ -1,12 +1,5 @@
 from django.db import models
 
-PRODUCT_STATUS = [
-    'Not Checked',
-    'Plagiarism detected',
-    'Not plagiat',
-    'Submitted'
-];
-
 class Product(models.Model):
     user_id = models.IntegerField()
     shop_id = models.IntegerField()
@@ -17,7 +10,7 @@ class Product(models.Model):
     price = models.IntegerField()
     rate = models.IntegerField()
     download_count = models.IntegerField()
-    status = models.CharField(max_length=1)
+    is_submitted = models.CharField(max_length=1)
     tags = models.CharField(max_length=255)
     
     class Meta:

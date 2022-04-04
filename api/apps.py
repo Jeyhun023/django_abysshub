@@ -15,8 +15,8 @@ class ApiConfig(AppConfig):
 
 class VectorizeConfig(AppConfig):
     global model 
-    model = SentenceTransformer("/home/ubuntu/django_abysshub/api/sbert1")
-    # model = SentenceTransformer("/home/abyss/Desktop/Abysshub/sbert1")
+    # model = SentenceTransformer("/home/ubuntu/django_abysshub/api/sbert1")
+    model = SentenceTransformer("/home/abyss/Desktop/Abysshub/sbert1")
     def get_vec(query):
         return model.encode(query)
 

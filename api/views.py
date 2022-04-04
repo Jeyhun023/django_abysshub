@@ -12,7 +12,7 @@ from .serializers import ForumSearchSerializer
 @api_view(['GET'])
 def check(request, id):
     ref_product = Product.objects.filter(id = id).first()
-    test_products = Product.objects.filter(status = 3).exclude(id = id)
+    test_products = Product.objects.filter(is_submitted = 1).exclude(id = id)
   
     for product in test_products:
         try:
